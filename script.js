@@ -954,11 +954,19 @@ const PRACTICES = [
           } else { Voice.say(it.past); }
         }
       });
-      wireOptions(it.a, () => '');
-      /* re-wire so the typed spelling counts as well as the sound */
       $$('#arena-body .opt').forEach(b => {
         b.onclick = () => {
           if(Arena.locked) return;
+          /* An empty box was silently scored as wrong before — a student who
+             picked the right sound but forgot to type first saw no verdict
+             they could make sense of. Now nothing is judged (and no attempt
+             is spent) until there is something to check the spelling of. */
+          if(!inp.value.trim()){
+            inp.classList.add('shake');
+            setTimeout(() => inp.classList.remove('shake'), 450);
+            inp.focus();
+            return;
+          }
           const spellOk = inp.value.trim().toLowerCase() === it.past;
           const soundOk = b.dataset.key === it.a;
           $$('#arena-body .opt').forEach(x => {
@@ -1062,6 +1070,12 @@ const PRACTICES = [
       $$('#arena-body .opt').forEach(b => {
         b.onclick = () => {
           if(Arena.locked) return;
+          if(!inp.value.trim()){
+            inp.classList.add('shake');
+            setTimeout(() => inp.classList.remove('shake'), 450);
+            inp.focus();
+            return;
+          }
           const spellOk = inp.value.trim().toLowerCase() === it.plural;
           const soundOk = b.dataset.key === it.a;
           $$('#arena-body .opt').forEach(x => {
