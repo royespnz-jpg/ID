@@ -30,8 +30,6 @@
    ========================================================================== */
 
 const CONFIG = {
-  /* Paste the /exec URL from Code.gs here, e.g.
-     'https://script.google.com/macros/s/AKfycb.../exec' */
   endpoint: 'https://script.google.com/macros/s/AKfycbxDHlRL7DlPMSUxgrKDPzh5JjTiP4sJ7Aq_Z_bKN4W9kw4RdM2RkuN_RtskO8NUw0aJqQ/exec',
 };
 
