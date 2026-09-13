@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Pronunciation of the &lt;ed&gt; and &lt;s&gt; endings in English — rules, listening practice and reading drills.">
+<meta name="color-scheme" content="dark">
+<title>Accurate English · &lt;ed&gt; and &lt;s&gt; Endings</title>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23050c12'/%3E%3Ccircle cx='12' cy='16' r='6' fill='%2300f5c4'/%3E%3Ccircle cx='20' cy='16' r='6' fill='%23ff4db8' opacity='.85'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,500&family=Inter:wght@300;400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- The base design system, taken unchanged from the Practices repository. -->
+<link rel="stylesheet" href="style.css">
+
+<!--
+  SUPPLEMENT ONLY.
+  style.css already supplies slides, dot nav, eyebrow, hero, stats, CTA, trial
+  cards, HUD, arena, specimen, options, verdict, gate form and signature.
+  Everything below is a component that the base sheet does not have — the rule
+  tables, the sound chips, the tappable reading passage, the voice panel — and
+  each one is built from the same tokens so it sits inside the same language.
+-->
+<style>
+  /* ── SOUND CHIPS ─────────────────────────────── */
+  .chips { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin:10px 0 4px; }
+  .chip {
+    font-family:'Spline Sans Mono',monospace; font-size:13px; font-weight:500;
+    padding:7px 14px; border-radius:50px;
+    border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.04);
+    color:rgba(255,255,255,.72);
+  }
+  .chip.teal { border-color:rgba(0,245,196,.45); color:#00f5c4; background:rgba(0,245,196,.08); }
+  .chip.pink { border-color:rgba(255,77,184,.45); color:#ff4db8; background:rgba(255,77,184,.08); }
+  .chip.purple { border-color:rgba(200,80,240,.45); color:#c850f0; background:rgba(200,80,240,.08); }
+
+  /* ── RULE TABLE ──────────────────────────────── */
+  .rule-grid { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(232px,1fr)); width:100%; }
+  .rule-card {
+    background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.09);
+    border-radius:14px; padding:18px 20px; text-align:left; position:relative; overflow:hidden;
+  }
+  .rule-card::before {
+    content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+    background:linear-gradient(180deg,#00f5c4,#00c8ff);
+  }
+  .rule-card.b::before { background:linear-gradient(180deg,#c850f0,#ff4db8); }
+  .rule-card.c::before { background:linear-gradient(180deg,#00c8ff,#c850f0); }
+  .rule-sound {
+    font-family:'Spline Sans Mono',monospace; font-size:26px; font-weight:500;
+    margin-bottom:4px; color:#00f5c4;
+  }
+  .rule-card.b .rule-sound { color:#ff4db8; }
+  .rule-card.c .rule-sound { color:#c850f0; }
+  .rule-when { font-size:12.5px; color:rgba(255,255,255,.55); line-height:1.55; margin-bottom:10px; }
+  .rule-when b { color:#fff; font-weight:600; }
+  .rule-ex { display:flex; flex-wrap:wrap; gap:6px; }
+  .ex-word {
+    font-size:12px; padding:4px 10px; border-radius:50px; cursor:pointer;
+    border:1px solid rgba(255,255,255,.1); background:rgba(0,0,0,.28);
+    color:rgba(255,255,255,.72); font-family:inherit;
+    transition:border-color .15s, color .15s, transform .15s;
+  }
+  .ex-word:hover { border-color:rgba(0,245,196,.4); color:#fff; transform:translateY(-1px); }
+  .ex-word .ip { font-family:'Spline Sans Mono',monospace; color:rgba(255,255,255,.38); margin-left:5px; }
+
+  /* ── NOTE STRIP ──────────────────────────────── */
+  .note {
+    font-size:13px; line-height:1.6; color:rgba(255,255,255,.6);
+    background:rgba(0,200,255,.06); border-left:3px solid #00c8ff;
+    border-radius:0 8px 8px 0; padding:11px 15px; margin-top:14px; text-align:left;
+  }
+  .note b { color:#fff; }
+  .note.warn { background:rgba(255,77,184,.07); border-left-color:#ff4db8; }
+
+  /* ── SECTION HEADS INSIDE SLIDES ─────────────── */
+  .sec-title {
+    font-family:'Fraunces',serif; font-size:clamp(26px,4.6vw,40px);
+    font-weight:600; line-height:1.05; letter-spacing:-1px; margin-bottom:10px;
+  }
+  .sec-lead { font-size:14.5px; color:rgba(255,255,255,.55); line-height:1.65; max-width:620px; margin:0 auto 20px; }
+
+  /* ── VOICE PANEL ─────────────────────────────── */
+  .voice-panel { display:grid; gap:12px; width:100%; max-width:560px; margin:0 auto 18px; text-align:left; }
+  .voice-row { display:grid; gap:8px; grid-template-columns:1fr 1fr; }
+  @media (max-width:520px){ .voice-row { grid-template-columns:1fr; } }
+  .voice-sel {
+    width:100%; padding:11px 14px; border-radius:12px;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12);
+    color:#e8e0f0; font-family:inherit; font-size:14px;
+  }
+  .voice-sel:focus { outline:none; border-color:#00f5c4; box-shadow:0 0 0 3px rgba(0,245,196,.12); }
+  .voice-test { display:flex; gap:9px; align-items:center; flex-wrap:wrap; }
+  .engine-note { font-size:11.5px; color:rgba(255,255,255,.34); line-height:1.5; }
+  .engine-note b { color:rgba(255,255,255,.6); }
+
+  /* ── PLAY BUTTON ─────────────────────────────── */
+  .play-big {
+    width:96px; height:96px; border-radius:50%; cursor:pointer; margin:6px auto 14px;
+    display:grid; place-items:center; color:#001; border:none;
+    background:linear-gradient(135deg,#00c8a0,#00a8d8);
+    box-shadow:0 0 42px rgba(0,200,160,.34);
+    transition:transform .18s, box-shadow .18s;
+  }
+  .play-big:hover { transform:scale(1.05); box-shadow:0 0 60px rgba(0,200,160,.5); }
+  .play-big:active { transform:scale(.97); }
+  .play-big svg { width:30px; height:30px; fill:currentColor; margin-left:4px; }
+  .play-big.ringing { animation:ring 1s ease-in-out infinite; }
+  @keyframes ring { 50% { box-shadow:0 0 70px rgba(0,200,160,.62); } }
+
+  /* ── TAPPABLE READING PASSAGE ────────────────── */
+  .passage { font-size:15px; line-height:2.35; text-align:left; color:#e8e0f0; }
+  .tok {
+    cursor:pointer; border-bottom:2px solid rgba(0,245,196,.45);
+    padding:1px 2px; border-radius:3px; position:relative;
+    transition:background .15s, border-color .15s;
+  }
+  .tok:hover { background:rgba(0,245,196,.1); }
+  .tok.done { border-bottom-color:rgba(255,255,255,.15); }
+  .tok .lab {
+    position:absolute; left:50%; top:100%; transform:translateX(-50%);
+    font-family:'Spline Sans Mono',monospace; font-size:10.5px;
+    color:#00f5c4; letter-spacing:.02em; white-space:nowrap; pointer-events:none;
+  }
+  .tok.bad .lab { color:#ff4db8; }
+  .tok.bad { border-bottom-color:rgba(255,77,184,.5); }
+
+  /* ── MATCH LISTS ─────────────────────────────── */
+  .match-wrap { display:grid; gap:10px; grid-template-columns:1fr 1fr; text-align:left; }
+  @media (max-width:620px){ .match-wrap { grid-template-columns:1fr; } }
+  .m-col { display:grid; gap:7px; align-content:start; }
+  .m-item {
+    padding:10px 13px; border-radius:10px; cursor:pointer; font-size:13.5px;
+    border:1px solid rgba(255,255,255,.09); background:rgba(255,255,255,.03);
+    color:rgba(255,255,255,.72); font-family:inherit; text-align:left;
+    transition:border-color .15s, background .15s, transform .15s;
+  }
+  .m-item:hover:not(:disabled) { border-color:rgba(0,245,196,.35); color:#fff; transform:translateY(-1px); }
+  .m-item.sel { border-color:#00f5c4; background:rgba(0,245,196,.1); color:#fff; }
+  .m-item.ok { border-color:rgba(0,245,196,.5); background:rgba(0,245,196,.08); color:#fff; }
+  .m-item.no { border-color:rgba(255,77,184,.5); background:rgba(255,77,184,.08); color:#fff; }
+  .m-item:disabled { cursor:default; }
+  .m-num { font-family:'Spline Sans Mono',monospace; color:#00f5c4; margin-right:7px; }
+
+  /* ── SCORE TABLE ON RESULTS ──────────────────── */
+  .score-table { width:100%; border-collapse:collapse; font-size:13.5px; text-align:left; margin-top:6px; }
+  .score-table th {
+    font-size:10px; letter-spacing:2px; text-transform:uppercase;
+    color:rgba(255,255,255,.35); font-weight:600; padding:8px 10px;
+    border-bottom:1px solid rgba(255,255,255,.1);
+  }
+  .score-table td { padding:9px 10px; border-bottom:1px solid rgba(255,255,255,.06); color:rgba(255,255,255,.7); }
+  .score-table td.n { font-family:'Spline Sans Mono',monospace; color:#00f5c4; white-space:nowrap; }
+  .score-table td.n.low { color:#ff4db8; }
+  .score-table tr.pending td { color:rgba(255,255,255,.28); }
+
+  /* ── MISC ────────────────────────────────────── */
+  .center { text-align:center; }
+  .mt { margin-top:16px; }
+  .wide { max-width:820px; }
+  .scroll-area { max-height:62vh; overflow-y:auto; padding-right:6px; }
+  .scroll-area::-webkit-scrollbar { width:6px; }
+  .scroll-area::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:3px; }
+  .kbd {
+    font-family:'Spline Sans Mono',monospace; font-size:11px;
+    border:1px solid rgba(255,255,255,.16); border-radius:5px;
+    padding:1px 6px; color:rgba(255,255,255,.5);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     MOTION LAYER — added on top of the inherited stylesheet
+     ═══════════════════════════════════════════════════════════════════ */
+
+  /* Bugfix: only ".slide-inner.centered" ever existed in the base sheet.
+     Every other "...center" used across this page and its dynamic templates
+     — a bare <div class="center">, ".repair-note center", ".specimen center"
+     — was a silent no-op. One low-specificity utility fixes all of them;
+     ".slide-inner.center" layers the extra flex align-items it also needs. */
+  .center { text-align:center; }
+  .slide-inner.center { align-items:center; text-align:center; }
+
+  /* Elements are pre-hidden only once script.js has confirmed Motion can
+     animate them back in — and script.js force-reveals everything after
+     3s no matter what, so a blocked or broken motion.js can never leave
+     the page blank. */
+  .anim-armed [data-reveal],
+  .anim-armed .rule-card,
+  .anim-armed .trial-card,
+  .anim-armed .stat { opacity:0; }
+
+  /* Once Motion owns the slide crossfade it needs full control of opacity/
+     transform without the base CSS transition fighting it. Without Motion
+     this class is never added, so the original — already correct — CSS-only
+     transition runs untouched. */
+  html.js-motion .slide { transition:none; }
+
+  /* ── GATE: asymmetric split, replacing the single centered column ──── */
+  .gate-split{
+    display:grid; grid-template-columns:1.05fr .95fr;
+    gap:clamp(28px,5vw,64px); align-items:center;
+    max-width:1080px; text-align:left;
+  }
+  .gate-text{ min-width:0; }
+  .hero-title.left, .hero-sub.left, .prof-line.left{ text-align:left; margin-inline:0; }
+  .gate-form.left{ align-items:flex-start; margin-inline:0; }
+  .dot-live{
+    display:inline-block; width:6px; height:6px; border-radius:50%;
+    background:#00f5c4; margin-right:8px; vertical-align:1px;
+    box-shadow:0 0 0 0 rgba(0,245,196,.6); animation:livePing 2.4s ease-out infinite;
+  }
+  @keyframes livePing{ 70%,100%{ box-shadow:0 0 0 10px rgba(0,245,196,0); } }
+  .gate-visual{ display:flex; justify-content:center; }
+  .sound-diagram{ width:100%; max-width:400px; height:auto; filter:drop-shadow(0 30px 60px rgba(0,0,0,.5)); }
+  @media (max-width:860px){
+    .gate-split{ grid-template-columns:1fr; text-align:center; }
+    .hero-title.left, .hero-sub.left, .prof-line.left{ text-align:center; }
+    .gate-form.left{ align-items:center; }
+    /* natural order on a small screen: read the value prop and sign in
+       first: the diagram is a nice confirmation afterward, not a wall to
+       scroll past before reaching the point of the page */
+    .gate-visual{ margin-top:28px; }
+    .sound-diagram{ max-width:280px; }
+  }
+
+  /* ── MAGNETIC BUTTONS — plain transform + CSS spring, no library ────── */
+  .cta-btn, .nav-btn{
+    transition:transform .5s cubic-bezier(.22,1.2,.32,1);
+    will-change:transform;
+  }
+  .cta-btn.pulling, .nav-btn.pulling{ transition:transform .12s linear; }
+
+  /* ── CARD SPOTLIGHT — cursor-tracked via CSS custom properties ──────── */
+  .trial-card::after, .rule-card::after{
+    content:''; position:absolute; inset:0; pointer-events:none; opacity:0;
+    transition:opacity .35s ease;
+    background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(0,245,196,.10), transparent 62%);
+  }
+  .trial-card:hover::after, .rule-card:hover::after{ opacity:1; }
+
+  /* ── OPTION FEEDBACK — reuses the shake keyframe already in style.css ─ */
+  .opt.wrong{ animation:shake .4s ease; }
+  .opt.correct{ animation:optPulse .4s ease; }
+  @keyframes optPulse{ 50%{ transform:scale(1.025); } }
+  .verdict{ animation:verdictIn .5s cubic-bezier(.22,1,.36,1) both; }
+  @keyframes verdictIn{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
+
+  /* ── SOUND DIAGRAM — the gate illustration breathes gently ──────────── */
+  .snd-orb{ animation:orbFloat 4.5s ease-in-out infinite; }
+  .snd-orb[data-i="1"], .snd-orb[data-i="4"]{ animation-delay:.5s; }
+  .snd-orb[data-i="2"], .snd-orb[data-i="5"]{ animation-delay:1s; }
+  @keyframes orbFloat{ 50%{ transform:translateY(-5px); } }
+
+  @media (prefers-reduced-motion: reduce){
+    .snd-orb, .dot-live, .opt.wrong, .opt.correct, .verdict{ animation:none!important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Ambient particle field, same device the base stylesheet expects. -->
+<canvas id="particles"></canvas>
+
+<!-- ============================================================= -->
+<!-- SLIDE 0 · GATE — the student signs in before anything starts. -->
+<!-- ============================================================= -->
+<section class="slide active" id="s-gate">
+  <div class="slide-inner gate-split">
+
+    <div class="gate-text">
+      <span class="eyebrow" data-reveal="0"><span class="dot-live" aria-hidden="true"></span>Accurate English · Chapter 14</span>
+      <h1 class="hero-title left" data-reveal="1">Six small sounds,<br><span class="grad-teal">one accurate accent</span></h1>
+      <p class="hero-sub left" data-reveal="2">
+        Every past tense and every plural you say carries one of six small sounds.
+        Get them right and your English stops sounding like a translation.
+        Sign in and the page keeps your score.
+      </p>
+
+      <form class="gate-form left" id="gate-form" autocomplete="on" data-reveal="3">
+        <label class="form-lbl" for="student-name">Your full name</label>
+        <input class="form-input" id="student-name" name="name" type="text"
+               placeholder="e.g. María Fernández" required autocomplete="name">
+
+        <button class="cta-btn" type="submit">
+          Begin <span class="btn-arrow">→</span>
+        </button>
+      </form>
+
+      <p class="prof-line left" data-reveal="4">
+        Designed by <span class="credit-name">Rosney Hernández</span>
+      </p>
+    </div>
+
+    <div class="gate-visual" data-reveal="2" aria-hidden="true">
+      <svg class="sound-diagram" viewBox="0 0 520 520" role="img" aria-label="Diagram of the six ending sounds, colour-coded by rule">
+<rect width="520" height="520" fill="#050c12" rx="20"/>
+<path class="snd-link" data-i="0" d="M 120 190 C 120 270.0, 120 270.0, 120 350" fill="none" stroke="#c850f0" stroke-width="1.3" stroke-dasharray="2 7" opacity=".55"/><path class="snd-link" data-i="1" d="M 260 190 C 260 270.0, 260 270.0, 260 350" fill="none" stroke="#00c8ff" stroke-width="1.3" stroke-dasharray="2 7" opacity=".55"/><path class="snd-link" data-i="2" d="M 400 190 C 400 270.0, 400 270.0, 400 350" fill="none" stroke="#00f5c4" stroke-width="1.3" stroke-dasharray="2 7" opacity=".55"/>
+
+  <g class="snd-orb" data-i="0" style="transform-origin:120px 150px">
+    <circle cx="120" cy="150" r="54" fill="#c850f0" opacity=".09"/>
+    <circle cx="120" cy="150" r="36" fill="#0b0f14" stroke="#c850f0" stroke-width="1.7"/>
+    <circle cx="120" cy="150" r="36" fill="#c850f0" opacity=".09"/>
+    <text x="120" y="157" text-anchor="middle" font-family="'Spline Sans Mono',monospace"
+          font-size="19" fill="#c850f0">/ɪd/</text>
+  </g>
+  <g class="snd-orb" data-i="1" style="transform-origin:260px 150px">
+    <circle cx="260" cy="150" r="54" fill="#00c8ff" opacity=".09"/>
+    <circle cx="260" cy="150" r="36" fill="#0b0f14" stroke="#00c8ff" stroke-width="1.7"/>
+    <circle cx="260" cy="150" r="36" fill="#00c8ff" opacity=".09"/>
+    <text x="260" y="157" text-anchor="middle" font-family="'Spline Sans Mono',monospace"
+          font-size="19" fill="#00c8ff">/t/</text>
+  </g>
+  <g class="snd-orb" data-i="2" style="transform-origin:400px 150px">
+    <circle cx="400" cy="150" r="54" fill="#00f5c4" opacity=".09"/>
+    <circle cx="400" cy="150" r="36" fill="#0b0f14" stroke="#00f5c4" stroke-width="1.7"/>
+    <circle cx="400" cy="150" r="36" fill="#00f5c4" opacity=".09"/>
+    <text x="400" y="157" text-anchor="middle" font-family="'Spline Sans Mono',monospace"
+          font-size="19" fill="#00f5c4">/d/</text>
+  </g>
+  <g class="snd-orb" data-i="3" style="transform-origin:120px 390px">
+    <circle cx="120" cy="390" r="54" fill="#c850f0" opacity=".09"/>
+    <circle cx="120" cy="390" r="36" fill="#0b0f14" stroke="#c850f0" stroke-width="1.7"/>
+    <circle cx="120" cy="390" r="36" fill="#c850f0" opacity=".09"/>
+    <text x="120" y="397" text-anchor="middle" font-family="'Spline Sans Mono',monospace"
+          font-size="19" fill="#c850f0">/ɪz/</text>
+  </g>
+  <g class="snd-orb" data-i="4" style="transform-origin:260px 390px">
+    <circle cx="260" cy="390" r="54" fill="#00c8ff" opacity=".09"/>
+    <circle cx="260" cy="390" r="36" fill="#0b0f14" stroke="#00c8ff" stroke-width="1.7"/>
+    <circle cx="260" cy="390" r="36" fill="#00c8ff" opacity=".09"/>
+    <text x="260" y="397" text-anchor="middle" font-family="'Spline Sans Mono',monospace"
+          font-size="19" fill="#00c8ff">/s/</text>
+  </g>
+  <g class="snd-orb" data-i="5" style="transform-origin:400px 390px">
+    <circle cx="400" cy="390" r="54" fill="#00f5c4" opacity=".09"/>
+    <circle cx="400" cy="390" r="36" fill="#0b0f14" stroke="#00f5c4" stroke-width="1.7"/>
+    <circle cx="400" cy="390" r="36" fill="#00f5c4" opacity=".09"/>
+    <text x="400" y="397" text-anchor="middle" font-family="'Spline Sans Mono',monospace"
+          font-size="19" fill="#00f5c4">/z/</text>
+  </g>
+<text x="260" y="42"  text-anchor="middle" font-family="'Spline Sans Mono',monospace" font-size="11"
+      letter-spacing="3" fill="rgba(255,255,255,.4)">&lt;ED&gt; ENDINGS</text>
+<text x="260" y="480" text-anchor="middle" font-family="'Spline Sans Mono',monospace" font-size="11"
+      letter-spacing="3" fill="rgba(255,255,255,.4)">&lt;S&gt; ENDINGS</text>
+<g font-family="'Spline Sans Mono',monospace" font-size="10" fill="rgba(255,255,255,.32)">
+  <circle cx="66" cy="260" r="3" fill="#c850f0"/><text x="76" y="264">extra syllable</text>
+  <circle cx="66" cy="278" r="3" fill="#00c8ff"/><text x="76" y="282">voiceless</text>
+  <circle cx="66" cy="296" r="3" fill="#00f5c4"/><text x="76" y="300">voiced</text>
+</g>
+</svg>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- SLIDE 1 · WELCOME + VOICE SETUP                                -->
+<!-- ============================================================= -->
+<section class="slide" id="s-voice">
+  <div class="slide-inner center">
+    <span class="eyebrow">Step one</span>
+    <h2 class="sec-title">Choose the voice<br>you will <span class="grad-pink">listen to</span></h2>
+    <p class="sec-lead">
+      Half of this page is listening. Pick the clearest English voice your device offers,
+      slow it down if you need to, and test it before you start.
+    </p>
+
+    <div class="voice-panel">
+      <div>
+        <label class="form-lbl" for="engine">Speech engine</label>
+        <select class="voice-sel" id="engine">
+          <option value="browser">Browser voices — free, already installed</option>
+          <option value="kokoro">Kokoro — free, needs a local server</option>
+        </select>
+      </div>
+
+      <div id="browser-block">
+        <label class="form-lbl" for="voice">Voice</label>
+        <select class="voice-sel" id="voice"></select>
+      </div>
+
+      <div id="kokoro-block" hidden>
+        <label class="form-lbl" for="kokoro-url">Kokoro endpoint</label>
+        <input class="form-input" id="kokoro-url" type="url" style="margin-bottom:8px"
+               placeholder="http://localhost:8880/v1/audio/speech">
+        <label class="form-lbl" for="kokoro-voice">Kokoro voice</label>
+        <select class="voice-sel" id="kokoro-voice">
+          <option value="af_heart">af_heart — American female</option>
+          <option value="af_bella">af_bella — American female</option>
+          <option value="af_nicole">af_nicole — American female, soft</option>
+          <option value="am_michael">am_michael — American male</option>
+          <option value="am_fenrir">am_fenrir — American male, deep</option>
+          <option value="bf_emma">bf_emma — British female</option>
+          <option value="bm_george">bm_george — British male</option>
+        </select>
+      </div>
+
+      <div class="voice-row">
+        <div>
+          <label class="form-lbl" for="rate">Speed <span id="rate-val" class="kbd">0.90</span></label>
+          <input type="range" id="rate" min="0.5" max="1.1" step="0.05" value="0.9" style="width:100%">
+        </div>
+        <div>
+          <label class="form-lbl">Test it</label>
+          <div class="voice-test">
+            <button class="nav-btn" type="button" id="test-voice">He needed it · walked · robbed</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="engine-note" id="engine-note">
+        <b>Browser voices</b> need no installation and work offline. <b>Kokoro</b> is a free,
+        open-weight voice, but it is a model that has to run somewhere — point this at your own
+        Kokoro server and the page will use it. If it cannot be reached, the browser voice takes over.
+      </p>
+    </div>
+
+    <button class="cta-btn" data-go="s-map">Continue <span class="btn-arrow">→</span></button>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- SLIDE 2 · TARGET OBJECTIVES                                    -->
+<!-- ============================================================= -->
+<section class="slide" id="s-map">
+  <div class="slide-inner center wide">
+    <span class="eyebrow">Target objectives</span>
+    <h2 class="sec-title">Three things to master</h2>
+    <p class="sec-lead">
+      This is the whole chapter reduced to what your mouth actually has to do.
+      Read these three, then earn your way through the eleven practices.
+    </p>
+
+    <div class="stats-row">
+      <div class="stat"><span class="stat-val grad-teal">3</span><span class="stat-lbl">Endings for &lt;ed&gt;</span></div>
+      <div class="stat"><span class="stat-val grad-pink">3</span><span class="stat-lbl">Endings for &lt;s&gt;</span></div>
+      <div class="stat"><span class="stat-val grad-teal">11</span><span class="stat-lbl">Practices</span></div>
+    </div>
+
+    <div class="rule-grid">
+      <button class="rule-card" data-go="s-ed">
+        <div class="tc-num">Objective 1</div>
+        <div class="tc-title">The &lt;ed&gt; ending</div>
+        <div class="tc-desc">Past tense. Three pronunciations, and only one of them adds a syllable.</div>
+        <span class="tc-tag">Read the rules</span>
+      </button>
+      <button class="rule-card b" data-go="s-s">
+        <div class="tc-num" style="color:rgba(255,77,184,.6)">Objective 2</div>
+        <div class="tc-title">The &lt;s&gt; ending</div>
+        <div class="tc-desc">Plurals, possessives and he/she/it. Same logic, different sounds.</div>
+        <span class="tc-tag">Read the rules</span>
+      </button>
+      <button class="rule-card c" data-go="s-groups">
+        <div class="tc-num" style="color:rgba(200,80,240,.6)">Objective 3</div>
+        <div class="tc-title">Consonant groups</div>
+        <div class="tc-desc">What to do when four consonants collide and your tongue gives up.</div>
+        <span class="tc-tag">Read the rules</span>
+      </button>
+    </div>
+
+    <div class="result-actions mt">
+      <button class="cta-btn" data-go="s-hub">Skip to the practices <span class="btn-arrow">→</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- SLIDE 3 · RULES — <ed>                                         -->
+<!-- ============================================================= -->
+<section class="slide" id="s-ed">
+  <div class="slide-inner wide center">
+    <div class="scroll-area">
+      <span class="eyebrow">Objective 1 · section 14.1</span>
+      <h2 class="sec-title">Adding <span class="grad-teal">&lt;ed&gt;</span></h2>
+      <p class="sec-lead">
+        The &lt;ed&gt; or &lt;d&gt; added to a regular verb is pronounced three different ways,
+        and which one you get is decided entirely by the sound the verb already ends in —
+        not by its spelling. Tap any word to hear it.
+      </p>
+
+      <div class="rule-grid" id="ed-rules"></div>
+
+      <p class="note">
+        <b>The only rule that adds a syllable is the first one.</b> <i>Needed</i> has two syllables;
+        <i>walked</i> and <i>robbed</i> still have one. If you add a syllable to <i>walked</i>,
+        you have said a word that does not exist.
+      </p>
+      <p class="note warn">
+        <b>The old adjectives break the rule.</b> A small group of very old words pronounce
+        &lt;ed&gt; as a separate syllable /ɪd/ even though they are adjectives:
+        <i>naked, crooked, ragged, wretched, wicked, rugged, learned, cross-legged</i>.
+        So do adverbs ending in &lt;edly&gt;: <i>supposedly, allegedly, markedly, deservedly, repeatedly</i>.
+        But <i>a married woman</i> and <i>a borrowed book</i> follow the normal rule.
+      </p>
+
+      <div class="result-actions mt">
+        <button class="nav-btn" data-go="s-map">← Objectives</button>
+        <button class="cta-btn small-cta" data-go="s-s">The &lt;s&gt; ending <span class="btn-arrow">→</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- SLIDE 4 · RULES — <s>                                          -->
+<!-- ============================================================= -->
+<section class="slide" id="s-s">
+  <div class="slide-inner wide center">
+    <div class="scroll-area">
+      <span class="eyebrow">Objective 2 · section 14.2</span>
+      <h2 class="sec-title">Adding <span class="grad-pink">&lt;s&gt;</span></h2>
+      <p class="sec-lead">
+        The &lt;s&gt;, &lt;es&gt; or &lt;'s&gt; that makes a plural, a possessive or a
+        third person singular works exactly like &lt;ed&gt;: voiceless with voiceless,
+        voiced with voiced, and an extra syllable only when the word already ends in a
+        hissing sound.
+      </p>
+
+      <div class="rule-grid" id="s-rules"></div>
+
+      <p class="note">
+        <b>Test for the extra syllable:</b> if the word already ends in /s, z, ʃ, ʒ, tʃ, dʒ/ you
+        physically cannot add another /s/ or /z/ — your mouth needs a vowel in between.
+        That is why <i>judges</i> sounds exactly like <i>judge is</i>.
+      </p>
+      <p class="note warn">
+        <b>Learn these by heart.</b> These common words all take /z/ even though the spelling
+        gives you no clue: <i>is, was, has, does, goes, says, his, hers, theirs, yours, ours,
+        always, sometimes</i>. Contractions follow the same rules:
+        <i>it's</i> /ɪts/, <i>that's</i> /ðæts/, <i>she's</i> /ʃiz/, <i>there's</i> /ðɛɚz/.
+      </p>
+
+      <div class="result-actions mt">
+        <button class="nav-btn" data-go="s-ed">← &lt;ed&gt;</button>
+        <button class="cta-btn small-cta" data-go="s-groups">Consonant groups <span class="btn-arrow">→</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- SLIDE 5 · RULES — consonant groups                             -->
+<!-- ============================================================= -->
+<section class="slide" id="s-groups">
+  <div class="slide-inner wide center">
+    <div class="scroll-area">
+      <span class="eyebrow">Objective 3 · section 14.3</span>
+      <h2 class="sec-title">Consonant <span class="grad-pink">groups</span></h2>
+      <p class="sec-lead">
+        Adding an ending can leave four consonants in a row. English allows up to seven
+        across two words — <i>He glimpsed strangers</i> is /mpststr/. Here are the five ways
+        out, and the one thing you must never drop.
+      </p>
+
+      <div class="rule-grid" id="group-rules"></div>
+
+      <p class="note warn">
+        <b>Never drop the ending itself.</b> You may drop a middle consonant —
+        <i>acts</i> /ækts/ becomes /æks/, <i>months</i> /mʌnθs/ becomes /mʌns/ — but the
+        grammatical &lt;ed&gt; or &lt;s&gt; has to survive. Drop that and you have changed
+        the grammar, not just the sound.
+      </p>
+
+      <div class="result-actions mt">
+        <button class="nav-btn" data-go="s-s">← &lt;s&gt;</button>
+        <button class="cta-btn small-cta" data-go="s-hub">Start practising <span class="btn-arrow">→</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- SLIDE 6 · PRACTICE HUB                                         -->
+<!-- ============================================================= -->
+<section class="slide" id="s-hub">
+  <div class="slide-inner wide center">
+    <div class="scroll-area">
+      <span class="eyebrow" id="hub-greeting">Practice</span>
+      <h2 class="sec-title">Eleven practices</h2>
+      <p class="sec-lead">
+        Four listening, three reading, two production, one linking, one vocabulary.
+        Your score for each one is kept while this page is open.
+      </p>
+      <div class="trial-grid" id="hub-grid"></div>
+      <div class="result-actions mt">
+        <button class="nav-btn" data-go="s-map">← Objectives</button>
+        <button class="nav-btn" data-go="s-report">See my report →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- SLIDE 7 · ARENA — every practice renders in here               -->
+<!-- ============================================================= -->
+<section class="slide" id="s-arena">
+  <div class="slide-inner wide">
+    <div class="game-topbar">
+      <div class="arena-game-name" id="arena-name">Practice</div>
+      <div class="hud">
+        <div class="hud-chip"><span class="hud-label">Item</span><span id="hud-item">1/10</span></div>
+        <div class="hud-chip"><span class="hud-label">Correct</span><span id="hud-score">0</span></div>
+      </div>
+    </div>
+    <div class="prog-bar-wrap"><div class="prog-bar" id="prog"></div></div>
+
+    <div class="arena">
+      <div id="arena-body"></div>
+    </div>
+
+    <div class="result-actions mt">
+      <button class="nav-btn" data-go="s-hub">← Back to the practices</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- SLIDE 8 · REPORT                                               -->
+<!-- ============================================================= -->
+<section class="slide" id="s-report">
+  <div class="slide-inner wide center">
+    <div class="scroll-area">
+      <span class="eyebrow">Report</span>
+      <h2 class="sec-title" id="report-title">Your results</h2>
+      <p class="sec-lead" id="report-lead">Finish a practice and it will appear here.</p>
+
+      <div class="stats-row">
+        <div class="stat"><span class="stat-val grad-teal" id="r-done">0</span><span class="stat-lbl">Practices done</span></div>
+        <div class="stat"><span class="stat-val grad-pink" id="r-pct">—</span><span class="stat-lbl">Overall</span></div>
+        <div class="stat"><span class="stat-val grad-teal" id="r-items">0</span><span class="stat-lbl">Items answered</span></div>
+      </div>
+
+      <table class="score-table" id="score-table"></table>
+      <p class="repair-note center" id="save-status"></p>
+      <p class="sheets-status" id="sheets-status"></p>
+
+      <div class="result-actions">
+        <button class="cta-btn small-cta" id="copy-report">Copy my report</button>
+        <button class="nav-btn" id="send-report" hidden>Send my report to my teacher</button>
+        <button class="nav-btn" id="reset-all">Clear my scores</button>
+        <button class="nav-btn" data-go="s-hub">← Practices</button>
+      </div>
+
+      <p class="prof-line">
+        Designed by <span class="credit-name">Rosney Hernández</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Slide indicator, wired up in script.js -->
+<nav class="dot-nav" id="dot-nav" aria-label="Page sections"></nav>
+
+<!-- Motion (motion.dev), bundled locally so the page works offline and never
+     depends on a CDN. If this file is ever missing, script.js detects it and
+     falls back to the plain CSS transitions below — nothing breaks. -->
+<script src="motion.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
