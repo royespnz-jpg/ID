@@ -16,7 +16,7 @@
    Structure of this file
      1.  DATA          the chapter, encoded
      2.  STATE         who is working and how they are doing
-     3.  VOICE         browser speech + optional Kokoro server
+     3.  VOICE         browser speech + real in-browser Kokoro (WASM, no server)
      4.  ROUTER        slide navigation and the dot nav
      5.  RULES         the three rule slides, rendered from DATA
      6.  ARENA         the shared shell every practice draws into
@@ -30,6 +30,8 @@
    ========================================================================== */
 
 const CONFIG = {
+  /* Paste the /exec URL from Code.gs here, e.g.
+     'https://script.google.com/macros/s/AKfycb.../exec' */
   endpoint: 'https://script.google.com/macros/s/AKfycbxDHlRL7DlPMSUxgrKDPzh5JjTiP4sJ7Aq_Z_bKN4W9kw4RdM2RkuN_RtskO8NUw0aJqQ/exec',
 };
 
@@ -319,7 +321,7 @@ const Store = (() => {
 const State = {
   name: '',
   scores: {},                 // practice id -> {right, total, at}
-  voice: { engine:'browser', voiceIndex:0, kokoroUrl:'', kokoroVoice:'af_heart', rate:0.9 }
+  voice: { engine:'browser', voiceIndex:0, kokoroVoice:'af_heart', rate:0.9 }
 };
 
 (function restore(){
@@ -338,6 +340,11 @@ function persist(){
 const $  = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* the exact inverse of esc(), for the rare case (arena title) where a name
+   string that was authored with entities for HTML contexts needs to become
+   plain text instead — never via innerHTML, which would re-parse '<ed>' as
+   an unknown tag and swallow it. */
+const decodeEntities = s => String(s).replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
 const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.random()*(i+1)|0; [a[i],a[j]]=[a[j],a[i]]; } return a; };
 const pick = (a,n) => shuffle(a).slice(0,n);
 const CALM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -437,13 +444,14 @@ function wireMicroInteractions(root=document){
 
 /* =============================================================================
    3. VOICE
-   Two engines. The browser one is always available; Kokoro is free and
-   open-weight but it is a model, so it has to be running somewhere the page
-   can reach. If the request fails we say so and fall back rather than going
-   silent in the middle of a listening exercise.
+   Two engines. Browser voices are always available, zero setup. Kokoro
+   (window.KokoroBridge, defined in index.html) runs a real 82M-parameter
+   model entirely in the browser via WASM — no server, nothing self-hosted —
+   but it is a ~90 MB one-time download, so it is opt-in, not the default.
+   say() never throws: a listening exercise must not die because audio did.
    ========================================================================== */
 const Voice = {
-  list: [], current: null, audio: null,
+  list: [], current: null, kokoroReady: false,
 
   init(){
     const load = () => {
@@ -477,17 +485,16 @@ const Voice = {
       $('#browser-block').hidden = k;
       State.voice.engine = engine.value;
       persist();
+      if(k && window.KokoroBridge && window.KokoroBridge.ready()) this.kokoroReady = true;
     };
     engine.addEventListener('change', sync);
     sync();
 
-    const url = $('#kokoro-url');
-    url.value = State.voice.kokoroUrl;
-    url.addEventListener('change', () => { State.voice.kokoroUrl = url.value.trim(); persist(); });
-
     const kv = $('#kokoro-voice');
     kv.value = State.voice.kokoroVoice;
     kv.addEventListener('change', () => { State.voice.kokoroVoice = kv.value; persist(); });
+
+    $('#kokoro-load').addEventListener('click', () => this.loadKokoro());
 
     const rate = $('#rate');
     rate.value = State.voice.rate;
@@ -503,13 +510,43 @@ const Voice = {
     });
   },
 
+  /* Explicit download step, triggered by the button — never silently, since
+     it is ~90 MB and the person should see it happening. */
+  async loadKokoro(){
+    if(!window.KokoroBridge){ this.kokoroNote('Kokoro could not start in this browser.', true); return; }
+    if(window.KokoroBridge.ready()){ this.kokoroReady = true; this.kokoroNote('Ready.'); return; }
+    const btn = $('#kokoro-load'), track = $('#kokoro-bar-track'), bar = $('#kokoro-bar');
+    btn.disabled = true; btn.textContent = 'Downloading…';
+    track.hidden = false;
+    this.kokoroNote('Downloading the model — this happens once.');
+    const res = await window.KokoroBridge.preload(pct => { bar.style.width = pct + '%'; });
+    track.hidden = true;
+    btn.disabled = false;
+    if(res.ok){
+      this.kokoroReady = true;
+      btn.textContent = 'Ready';
+      this.kokoroNote('Ready — every visit from now on is instant.');
+    }else{
+      btn.textContent = 'Download and enable Kokoro';
+      this.kokoroNote('Could not download Kokoro (' + res.error + '). Browser voices still work fine.', true);
+    }
+  },
+
+  kokoroNote(msg, isError){
+    const n = $('#kokoro-status-text');
+    if(n) n.textContent = msg;
+    const s = $('#kokoro-status');
+    if(s) s.classList.toggle('warn', !!isError);
+  },
+
   /* say() never throws — a listening exercise must not die because audio did */
   async say(text, slow){
     try{
-      if(State.voice.engine === 'kokoro' && State.voice.kokoroUrl){
-        const done = await this.kokoro(text);
-        if(done) return;
-        this.note('Kokoro did not answer — using the browser voice instead.');
+      if(State.voice.engine === 'kokoro' && this.kokoroReady && window.KokoroBridge){
+        const speed = slow ? Math.max(0.5, State.voice.rate - 0.3) : State.voice.rate;
+        const res = await window.KokoroBridge.speak(text, State.voice.kokoroVoice, speed);
+        if(res.ok) return;
+        this.kokoroNote('Kokoro had a problem — using the browser voice instead.', true);
       }
       this.browser(text, slow);
     }catch(e){
@@ -524,27 +561,6 @@ const Voice = {
     if(this.current) { u.voice = this.current; u.lang = this.current.lang; }
     u.rate = slow ? Math.max(0.45, State.voice.rate - 0.3) : State.voice.rate;
     speechSynthesis.speak(u);
-  },
-
-  /* OpenAI-compatible shape, which is what kokoro-fastapi exposes */
-  async kokoro(text){
-    try{
-      const res = await fetch(State.voice.kokoroUrl, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({
-          model:'kokoro', input:text,
-          voice: State.voice.kokoroVoice,
-          response_format:'mp3', speed: State.voice.rate
-        })
-      });
-      if(!res.ok) return false;
-      const blob = await res.blob();
-      if(this.audio) { this.audio.pause(); URL.revokeObjectURL(this.audio.src); }
-      this.audio = new Audio(URL.createObjectURL(blob));
-      await this.audio.play();
-      return true;
-    }catch(e){ return false; }
   },
 
   note(msg){
@@ -662,6 +678,15 @@ function renderRules(){
   $('#ed-rules').innerHTML     = ED_RULES.map(ruleCard).join('');
   $('#s-rules').innerHTML      = S_RULES.map(ruleCard).join('');
   $('#group-rules').innerHTML  = GROUP_RULES.map(ruleCard).join('');
+
+  /* same OLD_ADJ array the matching practice tests, so the teaching section
+     and the practice can never drift apart */
+  $('#adj-grid').innerHTML = OLD_ADJ
+    .filter(([w]) => !/ly$/.test(w))                 // adjectives here...
+    .map(([w]) => `<button class="adj-chip" data-say="${esc(w)}"><b>${esc(w)}</b></button>`).join('')
+    + '<span style="grid-column:1/-1;height:2px"></span>'
+    + OLD_ADJ.filter(([w]) => /ly$/.test(w))          // ...adverbs after
+    .map(([w]) => `<button class="adj-chip" data-say="${esc(w)}"><b>${esc(w)}</b></button>`).join('');
 }
 document.addEventListener('click', e => {
   const s = e.target.closest('[data-say]');
@@ -679,7 +704,7 @@ const Arena = {
     this.id = def.id; this.def = def;
     this.items = def.build();
     this.i = 0; this.right = 0; this.locked = false;
-    $('#arena-name').textContent = def.name;
+    $('#arena-name').textContent = decodeEntities(def.name);
     go('s-arena');
     this.draw();
   },
